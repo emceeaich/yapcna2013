@@ -1,5 +1,8 @@
 #!/user/bin/env perl
+use strict;
 use Mojolicious::Lite;
+
+# We'll define some data here that our API will return
 
 my $data = [
 {id => 1, title => 'Jane\'s Talk'},
@@ -7,12 +10,21 @@ my $data = [
 {id => 3, title => 'Gilbert\'s Talk'}
 ];
 
-get '/' => 'index';
+# routes
+
+get '/' => 'index'; # the default route returns the template defined below
+
+# a request to /api returns JSON with the property 
+# collection assigned to the serialization of $data
 
 get '/api' => sub {
     my $self = shift;
     $self->render_json({collection => $data});
 };
+
+# a request to /api/:id returns one of the hashes in $data, 
+# as long as the index is in bounds
+# otherwise return a 404 response
 
 get '/api/:id' => sub {
     my $self = shift;
