@@ -59,7 +59,7 @@
       // create a collection for the view specifying the URL of the API to use
       // and how to process the returned data
       var Collection = Backbone.Collection.extend({
-        url: '/api',
+        url: '/api/item',
           parse: function(data) {
             return data.collection; 
           }
@@ -86,7 +86,7 @@
     initialize: function(options) {
       // assign a model object to the view
       var Model = Backbone.Model.extend({
-        url: '/api/' + options.id
+        url: '/api/item/' + options.id
       });
       this.model = new Model();
       // redraw this when the model is refreshed
