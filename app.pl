@@ -18,7 +18,6 @@ get '/' => 'index'; # the default route returns the template defined below
 
 # a request to /api/item returns JSON with the property 
 # collection assigned to the serialization of $data
-# FIXME: only return a subset of properties in this cut
 
 get '/api/item' => sub {
     my $self = shift;
@@ -33,7 +32,6 @@ get '/api/item' => sub {
 # a request to /api/item/:id returns one of the hashes in $data, 
 # as long as the index is in bounds
 # otherwise return a 404 response
-# FIXME: change this to filter on ids
 
 get '/api/item/:id' => sub {
     my $self = shift;
