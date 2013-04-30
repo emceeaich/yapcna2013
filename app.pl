@@ -4,13 +4,13 @@ use Mojolicious::Lite;
 
 # We'll define some data here that our API will return
 
-my $data = [
-{id => 1, title => 'Jane\'s Talk'},
-{id => 2, title => 'Elane\'s Talk'},
-{id => 3, title => 'Gilbert\'s Talk'},
-{id => 4, title => 'Humberto\'s Talk'},
-{id => 5, title => 'Ameera\'s Talk'}
-];
+my $data = {
+    1 => {title => q(Jane's Talk),     boring=>1, length=>2.0 },
+    2 => {title => q(Elane's Talk),    boring=>0, length=>1.0 },
+    3 => {title => q(Gilbert's Talk),  boring=>1, length=>0.5 },
+    4 => {title => q(Humberto's Talk), boring=>1, length=>1.0 },
+    5 => {title => q(Ameera's Talk),   boring=>1, length=>1.0 }
+};
 
 # routes
 
@@ -22,7 +22,12 @@ get '/' => 'index'; # the default route returns the template defined below
 
 get '/api/item' => sub {
     my $self = shift;
-    $self->render_json({collection => $data});
+    my $wanted = [
+        map { { 'id' => $_,
+                'title' => $data->{$_}->{title} } }
+        keys %$data
+    ];
+    $self->render_json( { collection => $wanted  } );
 };
 
 # a request to /api/item/:id returns one of the hashes in $data, 
@@ -33,12 +38,14 @@ get '/api/item' => sub {
 get '/api/item/:id' => sub {
     my $self = shift;
     my $id   = int $self->param('id');
-    if ($id > 0 && $id < $data) {
-    	my $hash = $data->[$id - 1];
+
+    if (exists $data->{$id}) {
+    	my $hash = $data->{$id};
+        $hash->{id} = $id;
     	$self->render(json => $hash);
     }
     else {
-	$self->render(json => {error => "Not Found"}, status => 404);
+	   $self->render(json => {error => "Not Found"}, status => 404);
     }
 };
 
