@@ -8,8 +8,9 @@ my $data = {
     1 => {title => q(Jane's Talk),     boring=>1, length=>2.0 },
     2 => {title => q(Elane's Talk),    boring=>0, length=>1.0 },
     3 => {title => q(Gilbert's Talk),  boring=>1, length=>0.5 },
-    4 => {title => q(Humberto's Talk), boring=>1, length=>1.0 },
-    5 => {title => q(Ameera's Talk),   boring=>1, length=>1.0 }
+    4 => {title => q(Humberto's Talk), boring=>0, length=>1.0 },
+    5 => {title => q(Ameera's Talk),   boring=>0, length=>1.0 },
+    6 => {title => q(Xue's Talk),      boring=>1, length=>0.25}
 };
 
 # routes
@@ -22,9 +23,9 @@ get '/' => 'index'; # the default route returns the template defined below
 get '/api/item' => sub {
     my $self = shift;
     my $wanted = [
-        map { { 'id' => $_,
-                'title' => $data->{$_}->{title} } }
-        keys %$data
+      map { { 'id' => $_,
+              'title' => $data->{$_}->{title} } }
+      keys %$data
     ];
     $self->render_json( { collection => $wanted  } );
 };
@@ -36,14 +37,21 @@ get '/api/item' => sub {
 get '/api/item/:id' => sub {
     my $self = shift;
     my $id   = int $self->param('id');
+    my $size = scalar (keys %$data);
+    my $prev = $id - 1;
+    if ($prev < 1) {
+      $prev = $size;
+    }
 
     if (exists $data->{$id}) {
-    	my $hash = $data->{$id};
-        $hash->{id} = $id;
-    	$self->render(json => $hash);
+      my $hash = $data->{$id};
+      $hash->{id} = $id;
+      $hash->{next} = ($id % $size) + 1;
+      $hash->{prev} = $prev;
+      $self->render(json => $hash);
     }
     else {
-	   $self->render(json => {error => "Not Found"}, status => 404);
+      $self->render(json => {error => "Not Found"}, status => 404);
     }
 };
 

@@ -41,16 +41,17 @@
     // there's a matching subview, if not, it creates and renders it, otherwise
     // render the existing sub view
     detail: function(id) {
+      var view;
       console.log('detail');
-        if (_.isUndefined(app.views.detail[id])) {
-          app.views.detail[id] = new Detail({
-            el: '#content',
-            id: id
-          });
-        }
-        else  {
-          app.views.detail[id].render();
-        }
+      if (_.isUndefined(app.views.detail[id])) {
+        view = new Detail({
+          el: '#content',
+          id: id
+        });
+      }
+      else  {
+        app.views.detail[id].render();
+      }
     } 
   });
 
@@ -60,9 +61,12 @@
       // and how to process the returned data
       var Collection = Backbone.Collection.extend({
         url: '/api/item',
-          parse: function(data) {
-            return data.collection; 
-          }
+        parse: function(data) {
+          return data.collection; 
+        },
+        comparator: function(item) {
+          return item.get('id');
+        }
       });
       this.collection = new Collection();
       // re-rewnder the view whenever we fetch the collection
@@ -91,12 +95,27 @@
       this.model = new Model();
       // redraw this when the model is refreshed
       this.model.on('sync', this.render, this);
-      this.model.fetch();
+
+      // fetch model 
+      request = this.model.fetch();
+
+      // if the request for detail fails, render an error
+      request.fail( _.bind( function() { this.renderError(); }, this));
+
+      // if the request for detail succeeds, cache the view
+      request.done( _.bind( function() { app.views.detail[options.id] = this; }, this));
+
+    },
+
+    renderError: function() {
+      this.$el.html('');
+      this.$el.append(Mustache.render('<p>Unable to load requested item.</p><p><a href="#">Back</a></p>', {}));
+      return this;
     },
 
     render: function() {
       this.$el.html('');
-      this.$el.append(Mustache.render('<p>Details about {{title}}</p><p><a href="#">Back</a></p>', this.model.toJSON()));
+      this.$el.append(Mustache.render('<p>Details about {{title}}</p><p>Duration: {{length}} hour(s)</p><p>{{#boring}}Warning Boring Talk!{{/boring}}{{^boring}}Interesting Talk!{{/boring}}</p><p><a href="#item/{{prev}}">Previous</a> | <a href="#item/{{next}}">Next</a>  | <a href="#">Back</a></p>', this.model.toJSON()));
       return this;
     }
   });
