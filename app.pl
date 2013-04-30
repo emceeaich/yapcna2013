@@ -18,6 +18,7 @@ get '/' => 'index'; # the default route returns the template defined below
 
 # a request to /api/item returns JSON with the property 
 # collection assigned to the serialization of $data
+# FIXME: only return a subset of properties in this cut
 
 get '/api/item' => sub {
     my $self = shift;
@@ -27,6 +28,7 @@ get '/api/item' => sub {
 # a request to /api/item/:id returns one of the hashes in $data, 
 # as long as the index is in bounds
 # otherwise return a 404 response
+# FIXME: change this to filter on ids
 
 get '/api/item/:id' => sub {
     my $self = shift;
@@ -48,11 +50,11 @@ __DATA__
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>Mojo World</title>
+<title>Backbone/Mojolicous Example</title>
 <link rel="stylesheet" href="/app.css">
 </head>
 <body>
-<h1>Something Something</h1>
+<h1>Schedule</h1>
 <div id="content">
 Loading...
 </div>
