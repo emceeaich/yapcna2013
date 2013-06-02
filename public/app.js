@@ -69,7 +69,7 @@
         }
       });
       this.collection = new Collection();
-      // re-rewnder the view whenever we fetch the collection
+      // re-render the view whenever we fetch the collection
       this.collection.on('sync', this.render, this);
       this.collection.fetch();
     },
