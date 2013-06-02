@@ -26,7 +26,7 @@ get '/api/item' => sub {
               'title' => $data->{$_}->{title} } }
       keys %$data
     ];
-    $self->render_json( { collection => $wanted  } );
+    $self->render(json => { collection => $wanted  });
 };
 
 # a request to /api/item/:id returns one of the hashes in $data, 
