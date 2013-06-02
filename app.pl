@@ -1,5 +1,4 @@
 #!/user/bin/env perl
-use strict;
 use Mojolicious::Lite;
 
 # We'll define some data here that our API will return
@@ -67,6 +66,7 @@ __DATA__
 <link rel="stylesheet" href="/app.css">
 </head>
 <body>
+<noscript>This Application Requires JavaScript.</noscript>
 <h1>Schedule</h1>
 <div id="content">
 Loading...
