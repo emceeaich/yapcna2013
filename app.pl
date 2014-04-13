@@ -54,7 +54,6 @@ get '/api/item/:id' => sub {
     }
 };
 
-app->secret('welcome to the clown car, bro');
 app->start;
 __DATA__
 
@@ -71,10 +70,10 @@ __DATA__
 <div id="content">
 Loading...
 </div>
-<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-<script src="http://cdnjs.cloudflare.com/ajax/libs/mustache.js/0.7.2/mustache.min.js"></script>
-<script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>
-<script src="http://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.0.0/backbone-min.js"></script>
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/mustache/mustache.js"></script>
+<script src="/lib/underscore/underscore.js"></script>
+<script src="/lib/backbone/backbone.js"></script>
 <script src="/app.js"></script>
 </body>
 </html>
