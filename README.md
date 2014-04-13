@@ -8,5 +8,6 @@ To use,
 
 1. Install Mojolicious via cpan
 2. Clone this repository
-3. Switch to the directory you cloned the project into and run `morbo app.pl`
-4. Start a browser and go to http://127.0.0.1:3000/
+3. Run `bower install`
+4. Run `morbo app.pl`
+5. Start a browser and go to http://127.0.0.1:3000/
